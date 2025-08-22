@@ -1,0 +1,242 @@
+/* dashboard.css */
+
+.dashboard-container {
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f0f4f8; /* light blue-gray */
+  color: #333; /* dark text for readability */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.filters label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.filters select,
+.filters input[type="text"] {
+  margin-left: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.9rem;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.filters select:focus,
+.filters input[type="text"]:focus {
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+}
+
+.totals {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.total-box {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 18px 28px;
+  border-radius: 12px;
+  text-align: center;
+  width: 180px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.total-box:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.total-box p {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.total-number {
+  margin-top: 8px;
+  font-size: 2rem;
+  color: #000000;
+}
+
+.total-in {
+  color: #62be82; /* light green */
+}
+
+.total-out {
+  color: #c43f3f; /* light red */
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white; /* white table background to stand out */
+  color: #333; /* dark text */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin-top: 20px;
+}
+
+
+.inventory-table thead tr {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.inventory-table th,
+.inventory-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.inventory-table th {
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.inventory-table tbody tr {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.inventory-table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.type-in {
+  color: #1e8043; /* green */
+  font-weight: 600;
+}
+
+.type-out {
+  color: #cb0707; /* red */
+  font-weight: 600;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn.edit {
+  background-color: #4299e1;
+  color: white;
+  margin-right: 6px;
+}
+
+.btn.edit:hover {
+  background-color: #2b6cb0;
+}
+
+.btn.delete {
+  background-color: #f56565;
+  color: white;
+}
+
+.btn.delete:hover {
+  background-color: #c53030;
+}
+
+.btn.save {
+  background-color: #48bb78;
+  color: white;
+  margin-right: 6px;
+}
+
+.btn.save:hover {
+  background-color: #2f855a;
+}
+
+.btn.cancel {
+  background-color: #a0aec0;
+  color: #2d3748;
+}
+
+.btn.cancel:hover {
+  background-color: #718096;
+}
+
+.editing-row input,
+.editing-row select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1.5px solid #a0aec0;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.editing-row input:focus,
+.editing-row select:focus {
+  border-color: #4299e1;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .totals {
+    flex-direction: column;
+    align-items: center;
+  }
+  .total-box {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
+
+.low-stock-row {
+  background-color: rgba(255, 0, 0, 0.15) !important;
+}
+
+.alert-panel {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.alert-item {
+  font-weight: bold;
+  color: #856404;
+  padding: 5px 0;
+}
+
+
