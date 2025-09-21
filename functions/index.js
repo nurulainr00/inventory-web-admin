@@ -1,60 +1,36 @@
-const admin = require("firebase-admin");
-const fetch = require("node-fetch");
+import { getFunctions, httpsCallable } from "firebase/functions";
 
-// Replace with the path to your Firebase service account JSON file
-const serviceAccount = require("./serviceAccountKey.json");
+const functions = require("firebase-functions");
+const nodemailer = require("nodemailer");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+// 🔹 Use Firebase environment config to keep credentials safe
+const gmailEmail = functions.config().gmail.email;
+const gmailPassword = functions.config().gmail.password;
+
+// 🔹 Setup transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: gmailEmail,
+    pass: gmailPassword,
+  },
 });
 
-const db = admin.firestore();
+// 🔹 Cloud Function to send email
+exports.sendMail = functions.https.onCall(async (data, context) => {
+  const mailOptions = {
+    from: `"Smart Inventory" <${gmailEmail}>`,
+    to: data.to,
+    subject: data.subject,
+    html: data.html,
+  };
 
-// Your Zapier webhook URL here
-const zapierWebhookUrl = "https://hooks.zapier.com/hooks/catch/24183783/u6zl7u9/";
-
-const notifiedItems = new Set(); // track notified items to prevent repeat alerts
-
-async function checkLowStock() {
   try {
-    const snapshot = await db.collection("inventory").get();
-
-    for (const doc of snapshot.docs) {
-      const data = doc.data();
-      const qty = data.qty || 0;
-      const threshold = data.threshold || 0;
-      const item = data.item || "Unknown";
-
-      if (qty <= threshold) {
-        if (!notifiedItems.has(doc.id)) {
-          const payload = {
-            item,
-            quantity: qty,
-            threshold,
-            message: `Low stock alert for item ${item}: Quantity is ${qty} at or below threshold ${threshold}.`
-          };
-
-          await fetch(zapierWebhookUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-
-          console.log(`Zapier notified for item: ${item}`);
-          notifiedItems.add(doc.id);
-        }
-      } else {
-        // If stock replenished, remove from notified set so future alerts can trigger
-        notifiedItems.delete(doc.id);
-      }
-    }
+    await transporter.sendMail(mailOptions);
+    return { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    console.error("Error checking low stock:", error);
+    return { success: false, error: error.toString() };
   }
-}
+});
 
-// Run every 5 seconds (5,000 ms)
-setInterval(checkLowStock, 5000);
 
-console.log("Low stock monitor started. Checking every 5 seconds.");
-checkLowStock(); // initial run

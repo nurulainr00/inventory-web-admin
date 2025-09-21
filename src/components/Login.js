@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth } from "../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import '../login.css';  // your custom CSS
+import "../login.css"; // custom CSS
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -20,28 +20,39 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Admin Login</h2>
-      <form onSubmit={handleSubmit} className="login-form">
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+    <div className="login-page">
+      <div className="login-card">
+        {/* Logo */}
+        <img 
+          src="/avant.jpg" 
+          alt="System Logo" 
+          className="login-logo"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" className="login-button">
-          Login
-        </button>
-        {error && <p className="error-message">{error}</p>}
-      </form>
+        {/* Title */}
+        <h2>Smart Inventory and Tracking System</h2>
+        <p className="subtitle">Admin Login</p>
+
+        <form onSubmit={handleSubmit} className="login-form">
+          <input
+            type="email"
+            placeholder="Email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" className="login-button">
+            Login
+          </button>
+          {error && <p className="error-message">{error}</p>}
+        </form>
+      </div>
     </div>
   );
 };

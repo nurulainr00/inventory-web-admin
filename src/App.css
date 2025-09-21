@@ -7,10 +7,11 @@
 }
 
 .app-header {
+  background-color: #878787;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
 }
 
 .app-header h1 {
@@ -56,3 +57,23 @@
   background-color: #ddd;
 }
 
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 40px;
+  margin-right: 12px;
+}
+
+.navbar-title {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'; 
 import { db } from '../firebase/config';
 import '../dashboard.css';
+
 import {
   collection,
   getDocs,
@@ -119,24 +120,27 @@ const Dashboard = () => {
     setEditData({
       item: entry.item,
       qty: entry.qty,
-      threshold: entry.threshold || 0
+      threshold: 0
     });
   };
 
   const handleUpdate = async () => {
-    const newQty = Number(editData.qty);
-    const thresholdVal = Number(editData.threshold) || 0;
+  const oldQty = Number(editData.qty);
+  const thresholdVal = Number(editData.threshold) || 0;
 
-    await updateDoc(doc(db, "inventory", editId), {
-      item: editData.item,
-      qty: newQty,
-      threshold: thresholdVal,
-      lowStock: newQty <= thresholdVal
-    });
+  const finalQty = oldQty - thresholdVal < 0 ? 0 : oldQty - thresholdVal;
 
-    setEditId(null);
-    fetchData();
-  };
+  await updateDoc(doc(db, "inventory", editId), {
+    item: editData.item,
+    qty: finalQty,
+    threshold: thresholdVal,
+    lowStock: finalQty <= thresholdVal
+  });
+
+  setEditId(null);
+  fetchData();
+};
+
 
   const handleFilterChange = (month, year) => {
     setFilterMonth(month);
@@ -244,21 +248,7 @@ const Dashboard = () => {
                       <input
                         type="number"
                         value={editData.threshold}
-                        onChange={e => {
-                          const newThreshold = Number(e.target.value);
-                          const oldThreshold = Number(editData.threshold) || 0;
-                          const oldQty = Number(editData.qty) || 0;
-
-                          const diff = newThreshold - oldThreshold;
-                          let newQty = oldQty - diff;
-                          if (newQty < 0) newQty = 0;
-
-                          setEditData({
-                            ...editData,
-                            threshold: newThreshold,
-                            qty: newQty
-                          });
-                        }}
+                        onChange={e => setEditData({ ...editData, threshold: e.target.value })}
                       />
                     </td>
                     <td>{entry.date.toDate().toLocaleDateString()}</td>
