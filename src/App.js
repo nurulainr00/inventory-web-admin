@@ -5,6 +5,7 @@ import StockForm from './components/StockForm';
 import Dashboard from './components/Dashboard';
 import Report from './components/Report';
 import Login from "./components/Login";
+import AdminApproveStaffWeb from "./components/Staff"
 import './App.css';
 
 const sendEmail = async () => {
@@ -65,6 +66,8 @@ const App = () => {
     <button onClick={() => setPage('dashboard')} className="btn-nav">Dashboard</button>
     <button onClick={() => setPage('stockform')} className="btn-nav">Form</button>
     <button onClick={() => setPage('report')} className="btn-nav">Report</button>
+    <button onClick={() => setPage('staff')} className="btn-nav">Staff</button>
+
     {/* <button onClick={sendEmail} className="btn-nav">Send Email</button> */}
     <button onClick={handleLogout} className="btn-logout">Logout</button>
   </div>
@@ -80,6 +83,8 @@ const App = () => {
         )}
         {page === 'stockform' && <StockForm />}
         {page === 'report' && <Report />}
+        {page === 'staff' && <AdminApproveStaffWeb />}
+
       </main>
     </div>
   );
