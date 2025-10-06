@@ -9,11 +9,6 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-const mg = mailgun({
-  apiKey: 'key-08c79601-e57ae218', // Your Mailgun Private API Key
-  domain: 'sandboxe144ac4477f34201be81230e59c6281c.mailgun.org' // Your Mailgun Domain
-});
-
 app.post('/send-email', (req, res) => {
   const { to, subject, text } = req.body;
 

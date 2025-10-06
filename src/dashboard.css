@@ -239,4 +239,17 @@ h1 {
   padding: 5px 0;
 }
 
+.download-btn {
+  margin-top: 0.5rem;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background: #0056b3;
+}
 

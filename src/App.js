@@ -7,6 +7,30 @@ import Report from './components/Report';
 import Login from "./components/Login";
 import './App.css';
 
+const sendEmail = async () => {
+  try {
+    const response = await fetch("https://email-backend-1goy.onrender.com/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: "nurulainr00@gmail.com",
+        subject: "Hello from Smart Inventory 🚀",
+        html: "<h1>Inventory Alert</h1><p>Your stock is running low!</p>",
+      }),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert("✅ Email sent successfully!");
+    } else {
+      alert("❌ Failed: " + result.error);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Network error");
+  }
+};
+
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -41,7 +65,7 @@ const App = () => {
     <button onClick={() => setPage('dashboard')} className="btn-nav">Dashboard</button>
     <button onClick={() => setPage('stockform')} className="btn-nav">Form</button>
     <button onClick={() => setPage('report')} className="btn-nav">Report</button>
-    <button onClick={sendEmail} className="btn-nav">Send Email</button>
+    {/* <button onClick={sendEmail} className="btn-nav">Send Email</button> */}
     <button onClick={handleLogout} className="btn-logout">Logout</button>
   </div>
 </header>
@@ -60,29 +84,5 @@ const App = () => {
     </div>
   );
 };
-const sendEmail = async () => {
-  try {
-    const response = await fetch("http://localhost:5000/send-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: "nurulainr00@gmail.com",
-        subject: "Hello from Smart Inventory 🚀",
-        html: "<h1>Inventory Alert</h1><p>Your stock is running low!</p>",
-      }),
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      alert("✅ Email sent successfully!");
-    } else {
-      alert("❌ Failed: " + result.error);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("❌ Network error");
-  }
-};
-
 
 export default App;
