@@ -33,11 +33,25 @@ const Dashboard = () => {
 
   // Fetch inventory data
 useEffect(() => {
-  const unsub = onSnapshot(collection(db, "inventory"), (snapshot) => {
+  const unsub = onSnapshot(collection(db, "inventory"), async (snapshot) => {
     const items = snapshot.docs.map(docSnap => ({
       id: docSnap.id,
       ...docSnap.data()
     }));
+
+    // Auto-update lowStock status based on live data
+    for (const item of items) {
+      const currentQty = Number(item.qty || 0);
+      const threshold = Number(item.threshold || 0);
+      const shouldBeLow = currentQty <= threshold;
+
+      // only update if Firestore value mismatches current condition
+      if (item.lowStock !== shouldBeLow) {
+        await updateDoc(doc(db, "inventory", item.id), {
+          lowStock: shouldBeLow
+        });
+      }
+    }
 
     setData(items);
     applyFilter(items, filterMonth, filterYear);
@@ -45,6 +59,7 @@ useEffect(() => {
   });
   return () => unsub(); // cleanup
 }, []);
+
 
   // Run barcode backfill ONCE when Dashboard mounts
   useEffect(() => {
@@ -54,7 +69,7 @@ useEffect(() => {
   // Real-time listener for low stock alerts
 useEffect(() => {
   const unsub = onSnapshot(
-    query(collection(db, "inventory"), where("lowStock", "==", true)),
+    query(collection(db, "inventory"), where("qty", "<=", 2)),
     (snapshot) => {
       const lowStockItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setAlerts(lowStockItems);
@@ -159,7 +174,7 @@ useEffect(() => {
       item: editData.item,
       qty: finalQty,
       threshold: thresholdVal,
-      lowStock: finalQty <= thresholdVal
+      lowStock: finalQty <= 2
     });
 
     setEditId(null);

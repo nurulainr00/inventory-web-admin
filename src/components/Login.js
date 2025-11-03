@@ -8,16 +8,27 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  try {
+    // Sign in with Firebase
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // ✅ Allow only this specific admin email
+    const adminEmail = "nurul@gmail.com"; // <-- replace with your real admin email
+
+    if (user.email === adminEmail) {
       onLogin();
-    } catch {
-      setError("Invalid email or password");
+    } else {
+      setError("Access denied: Only the admin can log in.");
+      await auth.signOut(); // immediately log out non-admin users
     }
-  };
+  } catch {
+    setError("Invalid email or password");
+  }
+};
 
   return (
     <div className="login-page">
